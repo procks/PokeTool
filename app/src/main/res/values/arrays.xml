@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="pokemon_sort">
+        <item>CP</item>
+        <item>IV</item>
+        <item>Type CP</item>
+        <item>Type IV</item>
+        <item>Resent</item>
+    </string-array>
+</resources>

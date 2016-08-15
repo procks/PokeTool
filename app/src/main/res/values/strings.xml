@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">PokeTool</string>
+    <string name="action_logout">Logout</string>
+    <string name="login_warning"><Data><![CDATA[
+    As using this app could result in your account being <b>banned</b> it is recommended to use a Google account not attached to your Pokemon Go account.
+    Instead create and use a fake Pokemon Trainer Club (PTC) account with a different password and email.
+    ]]></Data></string>
+    <string name="prompt_username">PTC Username</string>
+    <string name="prompt_password">PTC Password</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="error_field_required">Field Required</string>
+    <string name="login_warning_title">Warning:</string>
+    <string name="toast_ptc_login_error">PTC login failed</string>
+    <string name="toast_google_login_error">Google login failed</string>
+    <string name="disclaimer">Disclaimer</string>
+
+    <string name="action_google_login">Google Login</string>
+</resources>
