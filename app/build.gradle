@@ -3,13 +3,12 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
-
     defaultConfig {
-        applicationId "com.yuralex.PokeTool"
+        applicationId 'com.yuralex.poketool'
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 1
-        versionName "0.1"
+        versionCode 2
+        versionName "0.2"
         multiDexEnabled true
     }
     buildTypes {
@@ -18,15 +17,20 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    productFlavors {
+    }
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-        testCompile 'junit:junit:4.12'
+    testCompile 'junit:junit:4.12'
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:design:23.4.0'
     compile 'com.pokegoapi:PokeGOAPI-library:0.4.0'
-//        compile 'com.google.android.gms:play-services-ads:8.4.0'
-//    compile files('libs/PokeGOAPI-library-all-0.4.0.jar')
+    //        compile 'com.google.android.gms:play-services:8.4.0'
+    //    compile files('libs/PokeGOAPI-library-all-0.4.0.jar')
+    compile 'com.google.firebase:firebase-ads:9.0.0'
 }
+
+apply plugin: 'com.google.gms.google-services'

@@ -18,6 +18,9 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapAppPreferences;
 import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapSharedPreferences;
 import com.omkarmoghe.pokemap.controllers.net.NianticManager;
@@ -48,6 +51,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        MobileAds.initialize(getApplicationContext(), "");
+
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        if (mAdView != null) {
+            mAdView.loadAd(adRequest);
+        }
+
         mPref = new PokemapSharedPreferences(this);
         NianticManager nianticManager = NianticManager.getInstance();
         try {
@@ -141,7 +153,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateList() {
         List<Pokemon> pokemons = mPokemons;
-        if (pokemons == null) return;
+        if (pokemons == null) {
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+            return;
+        }
         Comparator<Pokemon> comparator;
         switch (mSort) {
             case SORT_CP:

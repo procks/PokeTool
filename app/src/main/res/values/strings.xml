@@ -15,4 +15,6 @@
     <string name="disclaimer">Disclaimer</string>
 
     <string name="action_google_login">Google Login</string>
+
+    <string name="banner_ad_unit_id"></string>
 </resources>
