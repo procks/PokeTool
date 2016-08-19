@@ -23,7 +23,6 @@ public class NianticManager {
     private LoginListener mLoginListener;
     private PokemonGo mPokemonGo;
 
-
     public static NianticManager getInstance(){
         return instance;
     }
@@ -87,7 +86,6 @@ public class NianticManager {
         mAuthListener = listener;
         new AuthAsyncTask().execute(info);
     }
-
 
     private class AuthAsyncTask extends AsyncTask<LoginInfo, Void, String[]> {
         @Override

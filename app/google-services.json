@@ -1,0 +1,38 @@
+{
+  "project_info": {
+    "project_number": "82900659390",
+    "project_id": "poketool-140610"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:82900659390:android:1b03a703e8e7d656",
+        "android_client_info": {
+          "package_name": "com.yuralex.poketool"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4OBYY1cuN2Cs6l9Mo_6-PpWDjwBWuL_E"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-73954515-2"
+          }
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
