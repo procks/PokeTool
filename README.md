@@ -2,7 +2,9 @@
 Tool for Pokemon Go
 
 IV exact calculator
+
 Transfer pokemon
+
 Rename pokemon by IV
 
 ![](https://i.imgur.com/PBZgkJK.png)
