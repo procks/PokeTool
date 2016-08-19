@@ -1,17 +1,25 @@
 package com.yuralex.poketool;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.MobileAds;
 import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapSharedPreferences;
@@ -20,8 +28,13 @@ import com.omkarmoghe.pokemap.views.LoginActivity;
 import com.pokegoapi.api.PokemonGo;
 import com.pokegoapi.exceptions.LoginFailedException;
 import com.pokegoapi.exceptions.RemoteServerException;
+import com.yuralex.poketool.updater.AppUpdate;
+import com.yuralex.poketool.updater.AppUpdateDialog;
+import com.yuralex.poketool.updater.AppUpdateEvent;
+import com.yuralex.poketool.updater.AppUpdateLoader;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AppUpdateLoader.OnAppUpdateEventListener {
+    private static final int STORAGE_PERMISSION_REQUESTED = 10;
     private PokemapSharedPreferences mPref;
 
     CollectionPagerAdapter mCollectionPagerAdapter;
@@ -91,6 +104,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_logout:
                 logout();
                 return true;
+            case R.id.action_check_update:
+                new AppUpdateLoader(this, this).execute();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -157,4 +173,96 @@ public class MainActivity extends AppCompatActivity {
     public interface Updatable {
         void update();
     }
+
+
+    private void showAppUpdateDialog(final Context context, final AppUpdate update) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        AlertDialog dialog = builder.create();
+        if(!dialog.isShowing()) {
+            builder = new AlertDialog.Builder(context)
+                    .setTitle(R.string.update_available_title)
+                    .setMessage(context.getString(R.string.app_name) + " " + update.version + " " + context.getString(R.string.update_available_long) + "\n\n" + context.getString(R.string.changes) + "\n\n" + update.changelog)
+                    .setIcon(R.mipmap.ic_launcher)
+                    .setPositiveButton(context.getString(android.R.string.ok), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                            AppUpdateDialog.downloadAndInstallAppUpdate(context, update);
+                        }
+                    })
+                    .setNegativeButton(context.getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+//                            goToLoginScreen();
+                        }
+                    })
+                    .setCancelable(false);
+            dialog = builder.create();
+            dialog.show();
+        }
+    }
+
+    public static boolean doWeHaveReadWritePermission(Context context) {
+        return ContextCompat.checkSelfPermission(context, android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(context, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public void onAppUpdateEvent(AppUpdateEvent event) {
+        switch (event.status) {
+            case AppUpdateEvent.OK:
+                if (doWeHaveReadWritePermission(this)) {
+                    showAppUpdateDialog(this, event.appUpdate);
+//                    checkingForUpdate = false;
+                    System.out.println("Updating");
+                } else{
+                    getReadWritePermission();
+                }
+                break;
+            case AppUpdateEvent.FAILED:
+                Toast.makeText(this, R.string.update_check_failed, Toast.LENGTH_LONG).show();
+//                checkingForUpdate = false;
+                break;
+            case AppUpdateEvent.UPTODATE:
+//                checkingForUpdate = false;
+                break;
+        }
+    }
+
+    public void getReadWritePermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setCancelable(false)
+                    .setMessage(R.string.Permission_Required_Auto_Updater)
+                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            ActivityCompat.requestPermissions(MainActivity.this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                    android.Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_REQUESTED);
+                        }
+                    })
+                    .show();
+        } else {
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    android.Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_REQUESTED);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case STORAGE_PERMISSION_REQUESTED:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                    Toast.makeText(R.string.PERMISSION_OK);
+                    new AppUpdateLoader(this, this).execute();
+                } else {
+                    Toast.makeText(this, R.string.update_canceled, Toast.LENGTH_SHORT).show();
+//                    checkingForUpdate = false;
+//                    goToLoginScreen();
+                }
+                break;
+        }
+    }
+
 }

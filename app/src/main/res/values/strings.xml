@@ -23,4 +23,12 @@
     <string name="rename_title">Rename</string>
     <string name="please_waite">Please waite</string>
     <string name="action_rename_by_iv">Rename by IV</string>
+    <string name="updating">Updating</string>
+    <string name="action_check_update">Check for update</string>
+    <string name="Permission_Required_Auto_Updater">Permission is required for the auto-updater!</string>
+    <string name="update_available_title">Update available</string>
+    <string name="update_available_long">is available.</string>
+    <string name="changes">Changes:</string>
+    <string name="update_check_failed">Update check failed</string>
+    <string name="update_canceled">Update canceled</string>
 </resources>

@@ -5,10 +5,10 @@ android {
     buildToolsVersion "24.0.1"
     defaultConfig {
         applicationId 'com.yuralex.poketool'
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 24
-        versionCode 3
-        versionName "0.3"
+        versionCode 4
+        versionName "0.3.1"
         multiDexEnabled true
     }
     buildTypes {
