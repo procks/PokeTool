@@ -44,12 +44,12 @@ public class AppUpdateLoader extends AsyncTask<Void, Void, AppUpdateEvent> {
             AppUpdate update = new AppUpdate(releaseAssets.getString("browser_download_url"), latestRelease.getString("tag_name"), latestRelease.getString("body"));
 
             String version = "";
-//            try {
-//                PackageInfo pInfo =  mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0);
-//                version = pInfo.versionName;
-//            } catch (PackageManager.NameNotFoundException e) {
-//                e.printStackTrace();
-//            }
+            try {
+                PackageInfo pInfo =  mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0);
+                version = pInfo.versionName;
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
 
             SemVer currentVersion = SemVer.parse(version);
             SemVer remoteVersion = SemVer.parse(update.version);

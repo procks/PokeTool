@@ -224,6 +224,7 @@ public class MainActivity extends AppCompatActivity implements AppUpdateLoader.O
 //                checkingForUpdate = false;
                 break;
             case AppUpdateEvent.UPTODATE:
+                Toast.makeText(this, R.string.update_check_uptodate, Toast.LENGTH_LONG).show();
 //                checkingForUpdate = false;
                 break;
         }

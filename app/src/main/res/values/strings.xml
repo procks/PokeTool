@@ -31,4 +31,5 @@
     <string name="changes">Changes:</string>
     <string name="update_check_failed">Update check failed</string>
     <string name="update_canceled">Update canceled</string>
+    <string name="update_check_uptodate">No updates found</string>
 </resources>
