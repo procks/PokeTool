@@ -52,7 +52,7 @@ public class PokemonFragment extends Fragment implements MainActivity.Updatable 
     private static final int SORT_IV = 1;
     private static final int SORT_TYPE_CP = 2;
     private static final int SORT_TYPE_IV = 3;
-    private static final int SORT_RESENT = 4;
+    private static final int SORT_RECENT = 4;
     private Map<Integer, PokemonImg> mPokemonImages;
     private PokemonGo mGo;
     private List<Pokemon> mPokemons;
@@ -170,7 +170,7 @@ public class PokemonFragment extends Fragment implements MainActivity.Updatable 
         }
     }
 
-    private class ComparatorResent implements Comparator<Pokemon> {
+    private class ComparatorRecent implements Comparator<Pokemon> {
         public int compare(Pokemon p1, Pokemon p2) {
             return (int) (p2.getCreationTimeMs() - p1.getCreationTimeMs());
         }
@@ -191,8 +191,8 @@ public class PokemonFragment extends Fragment implements MainActivity.Updatable 
             case SORT_TYPE_IV:
                 comparator = new ComparatorTypeIv();
                 break;
-            case SORT_RESENT:
-                comparator = new ComparatorResent();
+            case SORT_RECENT:
+                comparator = new ComparatorRecent();
                 break;
             default:
                 comparator = new ComparatorCp();
