@@ -1,6 +1,10 @@
 # PokeTool
 Tool for Pokemon Go
 
-IV exact calculator
+* IV exact calculator
+* Transfer pokemon
+* Rename pokemon by IV
 
-![screenshot](https://raw.githubusercontent.com/procks/PokeTool/f62fb31cef602cc1f4e3045d46c72b6bb79a032d/Screenshot.png)
+![](https://i.imgur.com/PBZgkJK.png)
+
+In Pokedex E - possible number of evolutions, P - Pokemons after evolutions. Use it to calculate unnecessary pidgeys which need to transfer!
