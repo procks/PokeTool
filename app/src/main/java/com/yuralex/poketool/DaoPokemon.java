@@ -1,21 +1,14 @@
 package com.yuralex.poketool;
 
-import android.content.Context;
-
-import java.util.HashMap;
-import java.util.Map;
+import android.util.SparseArray;
 
 /**
+ *
  * Created by heiderlopes on 11/12/14.
  */
-public class DaoPokemon {
-    private Context ctx;
-    public DaoPokemon(Context context) {
-        ctx = context;
-    }
-
-    public Map<Integer, PokemonImg> getAllPokemon() {
-        Map<Integer, PokemonImg> pokemons = new HashMap<>();
+class DaoPokemon {
+    SparseArray<PokemonImg> getAllPokemon() {
+        SparseArray<PokemonImg> pokemons = new SparseArray<>();
 
         pokemons.put(1, new PokemonImg(1, "Bulbasaur", "Grama", R.drawable.p001_bulbasaur));
         pokemons.put(2, new PokemonImg(2, "Ivysaur", "", R.drawable.p002_ivysaur));
@@ -47,7 +40,7 @@ public class DaoPokemon {
         pokemons.put(28, new PokemonImg(28, "Sandslash", "", R.drawable.p028_sandslash));
         pokemons.put(29, new PokemonImg(29, "Nidoram Femea", "", R.drawable.p029_nidoran_femea));
         pokemons.put(30, new PokemonImg(30, "Nidorina", "", R.drawable.p030_nidorina));
-        pokemons.put(21, new PokemonImg(21, "Nidoqueen", "", R.drawable.p031_nidoqueen));
+        pokemons.put(31, new PokemonImg(31, "Nidoqueen", "", R.drawable.p031_nidoqueen));
         pokemons.put(32, new PokemonImg(32, "Nidoran Macho", "", R.drawable.p032_nidoran_macho));
         pokemons.put(33, new PokemonImg(33, "Nidorino", "", R.drawable.p033_nidorino));
         pokemons.put(34, new PokemonImg(34, "Nidoking", "", R.drawable.p034_nidoking));

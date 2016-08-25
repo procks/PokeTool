@@ -3,10 +3,12 @@ package com.yuralex.poketool;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,14 +31,13 @@ import com.pokegoapi.exceptions.LoginFailedException;
 import com.pokegoapi.exceptions.RemoteServerException;
 
 import java.util.Locale;
-import java.util.Map;
 
 import POGOProtos.Enums.PokemonFamilyIdOuterClass;
 import POGOProtos.Enums.PokemonIdOuterClass;
 
 public class PokedexFragment extends Fragment implements MainActivity.Updatable {
     private static final String TAG = PokedexFragment.class.getSimpleName();
-    private Map<Integer, PokemonImg> mPokemonImages;
+    private SparseArray<PokemonImg> mPokemonImages;
     private FragmentActivity mActivity;
     private StableArrayAdapter mGridAdapter;
     private GridView mGridView;
@@ -58,7 +59,7 @@ public class PokedexFragment extends Fragment implements MainActivity.Updatable 
         if (mActivity == null)
             return;
 
-        DaoPokemon daoPokemon = new DaoPokemon(mActivity);
+        DaoPokemon daoPokemon = new DaoPokemon();
         mPokemonImages = daoPokemon.getAllPokemon();
 
         NianticManager nianticManager = NianticManager.getInstance();
@@ -70,7 +71,7 @@ public class PokedexFragment extends Fragment implements MainActivity.Updatable 
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_pokedex, container, false);
 
-        AdView mAdView = (AdView) rootView.findViewById(R.id.adView);
+        AdView mAdView = (AdView) rootView.findViewById(R.id.adViewPokedex);
         AdRequest adRequest = new AdRequest.Builder().build();
         if (mAdView != null) {
             mAdView.loadAd(adRequest);
@@ -121,14 +122,15 @@ public class PokedexFragment extends Fragment implements MainActivity.Updatable 
         private final Context mmContext;
         Pokedex mmPokedex;
 
-        public StableArrayAdapter(Context context, int textViewResourceId, Pokedex pokedex) {
+        StableArrayAdapter(Context context, int textViewResourceId, Pokedex pokedex) {
             super(context, textViewResourceId);
             mmContext = context;
             mmPokedex = pokedex;
         }
 
+        @NonNull
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
             View rowView;
             if (convertView == null) {
                 LayoutInflater inflater = (LayoutInflater) mmContext

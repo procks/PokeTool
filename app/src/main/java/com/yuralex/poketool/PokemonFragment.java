@@ -3,14 +3,18 @@ package com.yuralex.poketool;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -39,7 +43,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 
 import POGOProtos.Networking.Responses.NicknamePokemonResponseOuterClass;
@@ -53,7 +56,7 @@ public class PokemonFragment extends Fragment implements MainActivity.Updatable 
     private static final int SORT_TYPE_CP = 2;
     private static final int SORT_TYPE_IV = 3;
     private static final int SORT_RECENT = 4;
-    private Map<Integer, PokemonImg> mPokemonImages;
+    private SparseArray<PokemonImg> mPokemonImages;
     private PokemonGo mGo;
     private List<Pokemon> mPokemons;
     private int mSort;
@@ -78,7 +81,7 @@ public class PokemonFragment extends Fragment implements MainActivity.Updatable 
             return;
         setHasOptionsMenu(true);
 
-        DaoPokemon daoPokemon = new DaoPokemon(mActivity);
+        DaoPokemon daoPokemon = new DaoPokemon();
         mPokemonImages = daoPokemon.getAllPokemon();
         NianticManager nianticManager = NianticManager.getInstance();
         mGo = nianticManager.getPokemonGo();
@@ -89,7 +92,7 @@ public class PokemonFragment extends Fragment implements MainActivity.Updatable 
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_pokemon, container, false);
 
-        AdView mAdView = (AdView) rootView.findViewById(R.id.adView);
+        AdView mAdView = (AdView) rootView.findViewById(R.id.adViewPokemon);
         AdRequest adRequest = new AdRequest.Builder().build();
         if (mAdView != null) {
             mAdView.loadAd(adRequest);
@@ -238,14 +241,15 @@ public class PokemonFragment extends Fragment implements MainActivity.Updatable 
         List<Pokemon> mmPokemons;
         private HashMap<Integer, Boolean> mSelection = new HashMap<>();
 
-        public StableArrayAdapter(Context context, int textViewResourceId, List<Pokemon> pokemons) {
+        StableArrayAdapter(Context context, int textViewResourceId, List<Pokemon> pokemons) {
             super(context, textViewResourceId, pokemons);
             mmContext = context;
             mmPokemons = pokemons;
         }
 
+        @NonNull
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
             LayoutInflater inflater = (LayoutInflater) mmContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             @SuppressLint("ViewHolder")
@@ -276,21 +280,21 @@ public class PokemonFragment extends Fragment implements MainActivity.Updatable 
             return rowView;
         }
 
-        public void setNewSelection(int position, boolean value) {
+        void setNewSelection(int position, boolean value) {
             mSelection.put(position, value);
             notifyDataSetChanged();
         }
 
-        public Set<Integer> getCurrentCheckedPosition() {
+        Set<Integer> getCurrentCheckedPosition() {
             return mSelection.keySet();
         }
 
-        public void removeSelection(int position) {
+        void removeSelection(int position) {
             mSelection.remove(position);
             notifyDataSetChanged();
         }
 
-        public void clearSelection() {
+        void clearSelection() {
             mSelection = new HashMap<>();
             notifyDataSetChanged();
         }
@@ -303,9 +307,20 @@ public class PokemonFragment extends Fragment implements MainActivity.Updatable 
     }
 
     private void renameByIv() {
-        mProgress = ProgressDialog.show(mActivity, mActivity.getString(R.string.rename_title),
-                mActivity.getString(R.string.please_waite), true);
-        new RenameAsyncTask().execute();
+        new AlertDialog.Builder(mActivity)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle(getString(R.string.rename_by_iv))
+                .setMessage(getString(R.string.rename_by_iv_dialog_msg))
+                .setPositiveButton(getString(android.R.string.yes), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mProgress = ProgressDialog.show(mActivity, mActivity.getString(R.string.rename_title),
+                                mActivity.getString(R.string.please_waite), true);
+                        new RenameAsyncTask().execute();
+                    }
+                })
+                .setNegativeButton(getString(android.R.string.no), null)
+                .show();
     }
 
     private class TransferAsyncTask extends AsyncTask<Void, Void, Integer> {
@@ -313,7 +328,7 @@ public class PokemonFragment extends Fragment implements MainActivity.Updatable 
         protected Integer doInBackground(Void... params) {
             int count = 0;
             for (int position : mGridAdapter.getCurrentCheckedPosition()) {
-                Log.e(TAG, "delete " + position);
+                Log.e(TAG, "Transfer " + position);
                 Pokemon pokemon = mPokemons.get(position);
                 if (pokemon != null) {
                     try {
@@ -364,16 +379,15 @@ public class PokemonFragment extends Fragment implements MainActivity.Updatable 
         @Override
         protected Integer doInBackground(Void... params) {
             int count = 0;
-            for (Pokemon pokemon : mPokemons) {
+            for (Pokemon p : mPokemons) {
 //                Log.e(TAG, "rename " + position);
-                if (pokemon != null) {
+                if (p != null) {
                     try {
-                        String name = String.format(Locale.ROOT, "%s IV%d", properCase(pokemon.getPokemonId().name()),
-                                (int) (pokemon.getIvRatio() * 100));
-
-                        NicknamePokemonResponseOuterClass.NicknamePokemonResponse.Result result = pokemon.renamePokemon(name);
+                        String name = String.format(Locale.ROOT, "%d%%%d/%d/%d", //%s properCase(p.getPokemonId().name()),
+                                (int) (p.getIvRatio() * 100), p.getIndividualAttack(), p.getIndividualDefense(), p.getIndividualStamina());
+                        NicknamePokemonResponseOuterClass.NicknamePokemonResponse.Result result = p.renamePokemon(name);
                         if (result == NicknamePokemonResponseOuterClass.NicknamePokemonResponse.Result.SUCCESS) count++;
-                        Log.i(TAG, "Rename result:" + result);
+                        Log.e(TAG, "Rename result:" + result);
                     } catch (LoginFailedException | RemoteServerException e) {
                         e.printStackTrace();
                     }

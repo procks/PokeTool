@@ -16,13 +16,15 @@
 
     <string name="action_google_login">Google Login</string>
 
-    <string name="banner_ad_unit_id"></string>
+    <string name="banner_ad_unit_id_pokemon"></string>
+    <string name="banner_ad_unit_id_pokedex"></string>
     <string name="action_refresh">Refresh</string>
     <string name="action_transfer">Transfer</string>
     <string name="transfer_title">Transfer</string>
     <string name="rename_title">Rename</string>
     <string name="please_waite">Please waite</string>
     <string name="action_rename_by_iv">Rename by IV</string>
+    <string name="rename_by_iv">Rename by IV</string>
     <string name="updating">Updating</string>
     <string name="action_check_update">Check for update</string>
     <string name="Permission_Required_Auto_Updater">Permission is required for the auto-updater!</string>
@@ -32,4 +34,5 @@
     <string name="update_check_failed">Update check failed</string>
     <string name="update_canceled">Update canceled</string>
     <string name="update_check_uptodate">No updates found</string>
+    <string name="rename_by_iv_dialog_msg">Are you sure you want to rename Pokemon?</string>
 </resources>

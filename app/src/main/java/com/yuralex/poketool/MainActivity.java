@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements AppUpdateLoader.O
 
     public class CollectionPagerAdapter extends FragmentStatePagerAdapter {
         SparseArray<Fragment> mRegisteredFragments = new SparseArray<>();
-        public CollectionPagerAdapter(FragmentManager fm) {
+        CollectionPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements AppUpdateLoader.O
             super.destroyItem(container, position, object);
         }
 
-        public Fragment getRegisteredFragment(int position) {
+        Fragment getRegisteredFragment(int position) {
             return mRegisteredFragments.get(position);
         }
     }
